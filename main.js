@@ -400,3 +400,67 @@ form.addEventListener('submit', (e) => {
   }
 });
 
+// ----- EJERCICIO 5 ------
+// Array faqs en main.js
+const faqs = [
+  {
+    pregunta: '¿Qué es el hoisting en JavaScript?',
+    respuesta:
+      'El hoisting es el comportamiento por el cual declaraciones de variables y funciones se mueven lógicamente al inicio de su ámbito. Esto significa que puedes usar ciertas funciones antes de declararlas, aunque no siempre es recomendable.'
+  },
+  {
+    pregunta: '¿Cuál es la diferencia entre var, let y const?',
+    respuesta:
+      'var tiene alcance de función y permite redeclaración, lo que puede causar errores sutiles. let y const tienen alcance de bloque; const no permite reasignación, mientras que let sí.'
+  },
+  {
+    pregunta: '¿Qué es el event loop?',
+    respuesta:
+      'El event loop es el mecanismo que permite que JavaScript maneje operaciones asíncronas sobre un solo hilo. Va procesando la cola de tareas, ejecutando callbacks cuando el call stack está libre.'
+  },
+  {
+    pregunta: '¿Qué es el DOM?',
+    respuesta:
+      'El DOM es una representación en forma de árbol del documento HTML en memoria. Permite que JavaScript manipule elementos, atributos y estilos de la página web dinámicamente.'
+  },
+  {
+    pregunta: '¿Qué es una callback?',
+    respuesta:
+      'Una callback es una función que se pasa como argumento a otra función para ser ejecutada después. Se usa mucho para manejar operaciones asíncronas y eventos en JavaScript.'
+  }
+];
+
+// Generar dinámicamente el acordeón
+const faqContainer = document.querySelector('#faq-container');
+
+faqs.forEach((item) => {
+  const faqItem = document.createElement('div');
+  faqItem.classList.add('faq-item');
+
+  const boton = document.createElement('button');
+  boton.classList.add('boton-faq');
+  boton.textContent = item.pregunta;
+
+  const respuesta = document.createElement('div');
+  respuesta.classList.add('respuesta');
+  respuesta.textContent = item.respuesta;
+
+  faqItem.appendChild(boton);
+  faqItem.appendChild(respuesta);
+  faqContainer.appendChild(faqItem);
+
+  boton.addEventListener('click', () => {
+    const estabaAbierta = respuesta.classList.contains('activo');
+
+    // 1. cerrar todas las respuestas y botones
+    const todasRespuestas = document.querySelectorAll('.respuesta');
+    todasRespuestas.forEach((res) => res.classList.toggle('activo', false));
+
+    const todosBotones = document.querySelectorAll('.boton-faq');
+    todosBotones.forEach((btn) => btn.classList.toggle('activo', false));
+
+    // 2. si NO estaba abierta, abrirla; si ya estaba abierta, se queda   todo cerrado
+    respuesta.classList.toggle('activo', !estabaAbierta);
+    boton.classList.toggle('activo', !estabaAbierta);
+  });
+});

@@ -6,3 +6,44 @@
 .error {
   border: 2px solid red;
 }
+
+/* Estilos básicos con CSS (para .respuesta y .activo) */
+
+.faq-item {
+  border-bottom: 1px solid #ddd;
+  padding: 8px 0;
+}
+
+.boton-faq {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  background: #f5f5f5;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-weight: 600;
+}
+
+.boton-faq::before {
+  content: '►';
+}
+
+.boton-faq.activo::before {
+  content: '▼';
+}
+
+.respuesta {
+  display: none;
+  padding: 8px 12px;
+  background: #fff;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.respuesta.activo {
+  display: block;
+}
+
