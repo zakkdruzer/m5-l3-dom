@@ -173,3 +173,74 @@ colorText.addEventListener('keydown', (e) => {
 
 //  Estado inicial
 actualizarColor(colorPicker.value);
+
+// ----- EJERCICIO 3 ------
+// Seleccionar elementos y crear función actualizarContador
+const todoInput = document.querySelector('#todo-input');
+const todoAddBtn = document.querySelector('#todo-add');
+const todoList = document.querySelector('#todo-list');
+const todoCount = document.querySelector('#todo-count');
+const todoError = document.querySelector('#todo-error');
+
+function actualizarContador() {
+  const pendientes = document.querySelectorAll('#todo-list li:not(.completada)').length;
+  todoCount.textContent = pendientes;
+}
+
+// Crear una función para agregar tareas
+function agregarTarea() {
+  const texto = todoInput.value.trim();
+
+  if (texto === '') {
+    // marcar error
+    todoInput.classList.add('error');
+    todoError.textContent = 'La tarea no puede estar vacía.';
+    return;
+  }
+
+  // limpiar error
+  todoInput.classList.remove('error');
+  todoError.textContent = '';
+
+  const li = document.createElement('li');
+
+  const spanTexto = document.createElement('span');
+  spanTexto.textContent = texto;
+
+  const btnCompletar = document.createElement('button');
+  btnCompletar.textContent = '✓';
+
+  const btnEliminar = document.createElement('button');
+  btnEliminar.textContent = '✕';
+
+  // eventos de los botones
+  btnCompletar.addEventListener('click', () => {
+    li.classList.toggle('completada');  // tacha o destacha
+    actualizarContador();
+  });
+
+  btnEliminar.addEventListener('click', () => {
+    li.remove();  // elimina el li del DOM
+    actualizarContador();
+  });
+
+  // armar el li
+  li.appendChild(spanTexto);
+  li.appendChild(btnCompletar);
+  li.appendChild(btnEliminar);
+
+  todoList.appendChild(li);
+
+  // limpiar input y actualizar contador
+  todoInput.value = '';
+  actualizarContador();
+}
+
+// Eventos para botón y Enter
+todoAddBtn.addEventListener('click', agregarTarea);
+
+todoInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    agregarTarea();
+  }
+});
