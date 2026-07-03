@@ -104,3 +104,72 @@ card.appendChild(habilidadesList);
 perfilContainer.appendChild(card);
 
 // ----- EJERCICIO 2 ------
+// Estructura inicial
+const colorPicker = document.querySelector('#color-picker');
+const colorText   = document.querySelector('#color-text');
+const colorPreview = document.querySelector('#color-preview');
+const colorHexLabel = document.querySelector('#color-hex');
+const colorNameLabel = document.querySelector('#color-name');
+const colorError = document.querySelector('#color-error');
+
+const colorNames = {
+  '#ff0000': 'Rojo',
+  '#00ff00': 'Verde',
+  '#0000ff': 'Azul',
+  '#ffff00': 'Amarillo',
+  '#000000': 'Negro',
+  '#ffffff': 'Blanco',
+  '#ffa500': 'Naranja',
+  '#800080': 'Violeta'
+};
+
+// Estilos inline
+colorPreview.style.height = '200px';
+colorPreview.style.borderRadius = '12px';
+colorPreview.style.border = '2px solid #ccc';
+colorPreview.style.marginTop = '16px';
+colorPreview.style.transition = 'background-color 0.2s ease';
+
+// Función central para actualizar todo
+function actualizarColor(hex) {
+  const hexNormalizado = hex.toLowerCase();
+
+  // actualizar preview
+  colorPreview.style.backgroundColor = hexNormalizado;
+
+  // actualizar textos
+  colorHexLabel.textContent = `Color actual: ${hexNormalizado}`;
+  const nombre = colorNames[hexNormalizado] || '';
+  colorNameLabel.textContent = nombre ? ` (${nombre})` : '';
+
+  // limpiar error
+  colorError.textContent = '';
+
+  // sincronizar ambos inputs
+  colorPicker.value = hexNormalizado;
+  colorText.value = hexNormalizado;
+}
+
+// Evento input del picker
+colorPicker.addEventListener('input', (e) => {
+  const valor = e.target.value; // viene en formato #rrggbb
+  actualizarColor(valor);
+});
+
+// Evento keydown del text input (validando Enter + RegEx)
+const hexRegex = /^#([0-9a-fA-F]{6})$/;
+
+colorText.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const valor = e.target.value.trim();
+
+    if (hexRegex.test(valor)) {
+      actualizarColor(valor);
+    } else {
+      colorError.textContent = 'Código hex inválido. Usa el formato #rrggbb.';
+    }
+  }
+});
+
+//  Estado inicial
+actualizarColor(colorPicker.value);
