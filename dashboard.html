@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Interactivo</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f5f7fb;
+      color: #2c3e50;
+    }
+
+    h1 {
+      margin-bottom: 16px;
+    }
+
+    .seccion {
+      margin-bottom: 32px;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    #metricas-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .form-actividad {
+      display: none;
+      margin-top: 12px;
+      gap: 8px;
+    }
+
+    .form-actividad.visible {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .mensaje {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #2ecc71;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .mensaje.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dashboard de actividad</h1>
+
+  <!-- Sección de métricas -->
+  <section class="seccion">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2>Métricas</h2>
+      <button id="btn-actualizar-metricas">Actualizar métricas</button>
+    </div>
+    <div id="metricas-grid"></div>
+  </section>
+
+  <!-- Sección de actividades -->
+  <section class="seccion">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap: 8px;">
+      <h2>Últimas actividades</h2>
+      <input id="busqueda-input" type="text" placeholder="Buscar actividad...">
+    </div>
+
+    <div style="margin-top:12px; display:flex; justify-content:space-between; align-items:center;">
+      <button id="btn-agregar-actividad">Agregar actividad</button>
+      <span id="estado-busqueda" style="font-size:0.85rem; color:#7f8c8d;"></span>
+    </div>
+
+    <form id="form-actividad" class="form-actividad">
+      <input id="actividad-usuario" type="text" placeholder="Usuario">
+      <input id="actividad-accion" type="text" placeholder="Acción">
+      <select id="actividad-estado">
+        <option value="exitoso">Exitoso</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="error">Error</option>
+      </select>
+      <button type="submit">Guardar</button>
+      <span id="actividad-error" style="color:#e74c3c; font-size:0.85rem;"></span>
+    </form>
+
+    <p id="actividad-mensaje" class="mensaje"></p>
+
+    <div style="margin-top:12px; overflow-x:auto;">
+      <table id="tabla-actividades" style="width:100%; border-collapse:collapse; font-size:0.9rem;">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Acción</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
