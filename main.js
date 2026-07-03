@@ -244,3 +244,159 @@ todoInput.addEventListener('keydown', (e) => {
     agregarTarea();
   }
 });
+
+// ----- EJERCICIO 4 ------
+// Selección de elementos y regex
+const form = document.querySelector('#registro-form');
+const inputUsuario = document.querySelector('#usuario');
+const inputEmail = document.querySelector('#email');
+const inputPassword = document.querySelector('#password');
+const inputConfirmar = document.querySelector('#confirmar');
+const btnEnviar = document.querySelector('#btn-enviar');
+const mensajeExito = document.querySelector('#registro-exito');
+
+// deshabilitar botón por defecto
+btnEnviar.setAttribute('disabled', true);
+
+// regex
+const usuarioRegex = /^[a-zA-Z0-9]+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  // formato básico válido
+
+// estado
+const estado = {
+  usuario: false,
+  email: false,
+  contrasena: false,
+  confirmar: false
+};
+
+// Crear dinámicamente los <span> de feedback
+function crearSpanFeedback(input) {
+  const span = document.createElement('span');
+  span.style.display = 'block';
+  span.style.fontSize = '0.85rem';
+  span.style.height = '1.2rem';
+
+  const contenedor = input.parentElement;
+  contenedor.appendChild(span);
+
+  return span;
+}
+
+const spanUsuario = crearSpanFeedback(inputUsuario);
+const spanEmail = crearSpanFeedback(inputEmail);
+const spanPassword = crearSpanFeedback(inputPassword);
+const spanConfirmar = crearSpanFeedback(inputConfirmar);
+
+// Función verificarFormulario
+function verificarFormulario() {
+  const todoValido =
+    estado.usuario &&
+    estado.email &&
+    estado.contrasena &&
+    estado.confirmar;
+
+  if (todoValido) {
+    btnEnviar.removeAttribute('disabled');
+  } else {
+    btnEnviar.setAttribute('disabled', true);
+  }
+}
+
+// Validadores por campo (keyup + blur)
+function validarUsuario() {
+  const valor = inputUsuario.value.trim();
+
+  if (valor.length < 4 || !usuarioRegex.test(valor)) {
+    spanUsuario.textContent = 'Mínimo 4 caracteres, solo letras y números.';
+    spanUsuario.style.color = 'red';
+    estado.usuario = false;
+  } else {
+    spanUsuario.textContent = '✓ Correcto';
+    spanUsuario.style.color = 'green';
+    estado.usuario = true;
+  }
+
+  verificarFormulario();
+}
+
+inputUsuario.addEventListener('keyup', validarUsuario);
+inputUsuario.addEventListener('blur', validarUsuario);
+
+// Validar email
+function validarEmail() {
+  const valor = inputEmail.value.trim();
+
+  if (!emailRegex.test(valor)) {
+    spanEmail.textContent = 'Email no válido.';
+    spanEmail.style.color = 'red';
+    estado.email = false;
+  } else {
+    spanEmail.textContent = '✓ Correcto';
+    spanEmail.style.color = 'green';
+    estado.email = true;
+  }
+
+  verificarFormulario();
+}
+
+inputEmail.addEventListener('keyup', validarEmail);
+inputEmail.addEventListener('blur', validarEmail);
+
+// Validar password
+function validarPassword() {
+  const valor = inputPassword.value;
+
+  if (valor.length < 8) {
+    spanPassword.textContent = 'Mínimo 8 caracteres.';
+    spanPassword.style.color = 'red';
+    estado.contrasena = false;
+  } else {
+    spanPassword.textContent = '✓ Correcto';
+    spanPassword.style.color = 'green';
+    estado.contrasena = true;
+  }
+
+  // también puede afectar a confirmar
+  validarConfirmar();
+  verificarFormulario();
+}
+
+// Validar confirmación
+function validarConfirmar() {
+  const valor = inputConfirmar.value;
+
+  if (valor === '' || valor !== inputPassword.value) {
+    spanConfirmar.textContent = 'Las contraseñas no coinciden.';
+    spanConfirmar.style.color = 'red';
+    estado.confirmar = false;
+  } else {
+    spanConfirmar.textContent = '✓ Correcto';
+    spanConfirmar.style.color = 'green';
+    estado.confirmar = true;
+  }
+
+  verificarFormulario();
+}
+
+inputPassword.addEventListener('keyup', validarPassword);
+inputPassword.addEventListener('blur', validarPassword);
+
+inputConfirmar.addEventListener('keyup', validarConfirmar);
+inputConfirmar.addEventListener('blur', validarConfirmar);
+
+// Manejar el submit del formulario
+form.addEventListener('submit', (e) => {
+  e.preventDefault();  // no recargar ni enviar realmente
+
+  if (
+    estado.usuario &&
+    estado.email &&
+    estado.contrasena &&
+    estado.confirmar
+  ) {
+    mensajeExito.textContent = `¡Registro exitoso! Bienvenido, ${inputUsuario.value.trim()}.`;
+    form.style.display = 'none';
+  }
+});
+
